@@ -1,6 +1,6 @@
 Project Structure
 
-`
+```
 pac-man/
 │
 ├── src/                        # Source files
@@ -72,4 +72,4 @@ pac-man/
 ├── .gitignore                  # Git ignore file
 ├── Makefile                    # Makefile for building the project
 └── README.md                   # Project overview and setup instructions
-`
+```
