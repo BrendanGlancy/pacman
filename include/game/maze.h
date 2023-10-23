@@ -4,8 +4,9 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define HEIGHT 50
-#define WIDTH 50
+#define HEIGHT 20
+#define WIDTH 20
+#define CELL_SIZE 50
 
 // Structs
 typedef struct {

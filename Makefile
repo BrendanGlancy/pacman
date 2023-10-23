@@ -4,6 +4,10 @@ CC = gcc
 # Compiler flags
 CFLAGS = -Wall -Wextra -g
 
+# SDL2 flags and libraries
+SDL_FLAGS = $(shell sdl2-config --cflags)
+SDL_LIBS = $(shell sdl2-config --libs) -lSDL2_gfx
+
 # Directories
 SRC_DIR = src
 INCLUDE_DIR = include
@@ -21,12 +25,12 @@ all: $(TARGET)
 
 # Link the object files into the target
 $(TARGET): $(OBJECTS)
-	$(CC) $(OBJECTS) -o $@ $(CFLAGS)
+	$(CC) $(OBJECTS) -o $@ $(CFLAGS) $(SDL_LIBS)
 
 # Compile the source files into object files
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
-	$(CC) -c $< -o $@ -I$(INCLUDE_DIR) $(CFLAGS)
+	$(CC) -c $< -o $@ -I$(INCLUDE_DIR) $(CFLAGS) $(SDL_FLAGS)
 
 # Clean up
 clean:
