@@ -1,3 +1,38 @@
+# Pac-Man Game 
+
+An attempt to create something similar to the original Pac-Man game in C
+
+## Getting Started
+
+### Prerequisites
+
+Ensure you have the following installed:
+- A C++ compiler (e.g., GCC, Clang)
+- Make (optional for easier building)
+
+## Dependencies:
+
+1. **SDL2**: A cross-platform development library designed to provide low-level access to audio, keyboard, mouse, joystick, and graphics hardware via OpenGL and Direct3D.
+
+2. **SDL2_gfx**: An extension of the SDL2 library to provide basic drawing functions such as lines, circles, or polygons.
+
+### Installing Dependencies:
+
+#### macOS (using Homebrew):
+
+```bash
+brew install sdl2
+brew install sdl2_gfx
+```
+
+#### Linux:
+
+```bash
+sudo apt update
+sudo apt install libsdl2-dev
+sudo apt install libsdl2-gfx-dev
+```
+
 Project Structure
 
 ```
