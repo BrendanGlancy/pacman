@@ -1,5 +1,6 @@
 #include "../../include/game/pac-man.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 Pacman pacman;
 
@@ -14,33 +15,53 @@ void init_pacman() {
 }
 
 void key_input() {
-  int nextX = pacman.x + pacman.dx;
-  int nextY = pacman.y + pacman.dy;
+  int temp_dx = 0, temp_dy = 0;
+  
+  if (key_pressed(LEFT)) {
+    temp_dx = -1;
+    if (val_position(pacman.x - 1, pacman.y)) {
+      pacman.dx = temp_dx;
+      pacman.isMoving = 1;
+    }
+  }
+  else if (key_pressed(RIGHT)) {
+    temp_dx = 1;
+    if (val_position(pacman.x + 1, pacman.y)) {
+      pacman.dx = temp_dx;
+      pacman.isMoving = 1;
+    }
+  }
+  else if (key_pressed(DOWN)) {
+    temp_dy = 1;
+    if (val_position(pacman.x, pacman.y + 1)) {
+      pacman.dy = temp_dy;
+      pacman.isMoving = 1;
+    }
+  }
+  else if (key_pressed(UP)) {
+    temp_dy = -1;
+    if (val_position(pacman.x, pacman.y - 1)) {
+      pacman.dy = temp_dy;
+      pacman.isMoving = 1;
+    }
+  }
+}
 
-  // Check LEFT
-  if (key_pressed(LEFT) && nextX > 0) {
-    pacman.dx = -1;
-    pacman.dy = 0;
-    pacman.isMoving = 1;
+int val_position(int nextX, int nextY) {
+  if (nextX < 0 || nextX > WIDTH - 1 || nextY < 0 || nextY > HEIGHT - 1) {
+    return 0;
   }
-  // Check RIGHT
-  else if (key_pressed(RIGHT) && nextX < WIDTH - 1) {
-    pacman.dx = 1;
-    pacman.dy = 0;
-    pacman.isMoving = 1;
-  }
-  // Check DOWN
-  else if (key_pressed(DOWN) && nextY < HEIGHT - 1) {
-    pacman.dx = 0;
-    pacman.dy = 1;
-    pacman.isMoving = 1;
-  }
-  // Check UP
-  else if (key_pressed(UP) && nextY > 0) {
-    pacman.dx = 0;
-    pacman.dy = -1;
-    pacman.isMoving = 1;
-  }
+
+  if (nextX > pacman.x && maze[pacman.x][pacman.y].right_wall) // Moving right
+    return 0;
+  if (nextX < pacman.x && maze[pacman.x][pacman.y].left_wall) // Moving left
+    return 0;
+  if (nextY > pacman.y && maze[pacman.x][pacman.y].bottom_wall) // Moving down
+    return 0;
+  if (nextY < pacman.y && maze[pacman.x][pacman.y].top_wall) // Moving up
+    return 0;
+
+  return 1;
 }
 
 void update_pacman_position() {

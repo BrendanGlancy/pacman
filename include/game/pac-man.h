@@ -16,5 +16,6 @@ extern Pacman pacman;
 void init_pacman();
 void update_pacman_position();
 void key_input();
+int val_position(int x, int y);
 
 #endif
