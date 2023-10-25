@@ -16,15 +16,23 @@ void handle_input(SDL_Event event) {
     case SDL_KEYDOWN:
       switch (event.key.keysym.sym) {
       case SDLK_LEFT:
+      case SDLK_a:
+      case SDLK_h:
         key_states[LEFT] = 1;
         break;
       case SDLK_RIGHT:
+      case SDLK_d:
+      case SDLK_l:
         key_states[RIGHT] = 1;
         break;
       case SDLK_UP:
+      case SDLK_w:
+      case SDLK_k:
         key_states[UP] = 1;
         break;
       case SDLK_DOWN:
+      case SDLK_s:
+      case SDLK_j:
         key_states[DOWN] = 1;
         break;
       }
@@ -33,15 +41,23 @@ void handle_input(SDL_Event event) {
     case SDL_KEYUP:
       switch (event.key.keysym.sym) {
       case SDLK_LEFT:
+      case SDLK_a:
+      case SDLK_h:
         key_states[LEFT] = 0;
         break;
       case SDLK_RIGHT:
+      case SDLK_d:
+      case SDLK_l:
         key_states[RIGHT] = 0;
         break;
       case SDLK_UP:
+      case SDLK_w:
+      case SDLK_k:
         key_states[UP] = 0;
         break;
       case SDLK_DOWN:
+      case SDLK_s:
+      case SDLK_j:
         key_states[DOWN] = 0;
         break;
       }

@@ -16,7 +16,7 @@ void draw_maze() {
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black color
   SDL_RenderClear(renderer);
 
-  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // White color
+  SDL_SetRenderDrawColor(renderer, 3, 138, 255, 1); // blue color
 
   // Draw maze walls using SDL2
   for (int i = 0; i < HEIGHT; i++) {
@@ -49,7 +49,7 @@ void draw_maze() {
   // Draw Pac-Man
   int pacmanCenterX = pacman.x * CELL_SIZE + CELL_SIZE / 2;
   int pacmanCenterY = pacman.y * CELL_SIZE + CELL_SIZE / 2;
-  int pacmanRadius = CELL_SIZE / 2;
+  int pacmanRadius = CELL_SIZE / 2.5;
 
   filledCircleRGBA(renderer, pacmanCenterX, pacmanCenterY, pacmanRadius, 255,
                    255, 0, 255);
@@ -88,7 +88,7 @@ int main() {
     update_pacman_position();
     draw_maze();
     SDL_RenderPresent(renderer);
-    SDL_Delay(16); // 60 FPS would be approximately 16ms delay
+    SDL_Delay(100); // 60 FPS would be approximately 16ms delay
   }
 
   SDL_DestroyRenderer(renderer);
