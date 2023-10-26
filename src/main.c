@@ -1,5 +1,7 @@
 #include "../include/game/maze.h"
 #include "../include/game/pac-man.h"
+#include "../include/graphics/renderer.h"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_error.h>
@@ -11,51 +13,36 @@
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
 
-// Function to print the maze to the console
 void draw_maze() {
-  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black color
+  SDL_SetRenderDrawColor(renderer, BLACK_COLOR.r, BLACK_COLOR.g, BLACK_COLOR.b,
+                         BLACK_COLOR.a);
   SDL_RenderClear(renderer);
 
-  SDL_SetRenderDrawColor(renderer, 3, 138, 255, 1); // blue color
-
-  // Draw maze walls using SDL2
+  SDL_SetRenderDrawColor(renderer, BLUE_COLOR.r, BLUE_COLOR.g, BLUE_COLOR.b,
+                         BLUE_COLOR.a);
   for (int i = 0; i < HEIGHT; i++) {
     for (int j = 0; j < WIDTH; j++) {
-      Cell cell = maze[i][j];
+      const Cell *cell = &maze[i][j];
       int x = j * CELL_SIZE;
       int y = i * CELL_SIZE;
 
-      // Draw the top wall
-      if (cell.top_wall) {
+      if (cell->top_wall)
         SDL_RenderDrawLine(renderer, x, y, x + CELL_SIZE, y);
-      }
-      // Draw the bottom wall
-      if (cell.bottom_wall) {
+      if (cell->bottom_wall)
         SDL_RenderDrawLine(renderer, x, y + CELL_SIZE, x + CELL_SIZE,
                            y + CELL_SIZE);
-      }
-      // Draw the left wall
-      if (cell.left_wall) {
+      if (cell->left_wall)
         SDL_RenderDrawLine(renderer, x, y, x, y + CELL_SIZE);
-      }
-      // Draw the right wall
-      if (cell.right_wall) {
+      if (cell->right_wall)
         SDL_RenderDrawLine(renderer, x + CELL_SIZE, y, x + CELL_SIZE,
                            y + CELL_SIZE);
-      }
     }
   }
 
-  // Draw Pac-Man
-  int pacmanCenterX = pacman.x * CELL_SIZE + CELL_SIZE / 2;
-  int pacmanCenterY = pacman.y * CELL_SIZE + CELL_SIZE / 2;
-  int pacmanRadius = CELL_SIZE / 2.5;
-
-  filledCircleRGBA(renderer, pacmanCenterX, pacmanCenterY, pacmanRadius, 255,
-                   255, 0, 255);
-
-  // Optionally, draw Pac-Man's mouth here based on movement direction
-  // ... [logic to draw Pac-Man's mouth depending on his direction]
+  filledCircleRGBA(renderer, pacman.x * CELL_SIZE + CELL_SIZE / 2,
+                   pacman.y * CELL_SIZE + CELL_SIZE / 2, CELL_SIZE / 2.5,
+                   PACMAN_COLOR.r, PACMAN_COLOR.g, PACMAN_COLOR.b,
+                   PACMAN_COLOR.a);
 }
 
 int main() {
@@ -63,32 +50,42 @@ int main() {
   init_maze();
   generate_maze(0, 0);
 
-  if (SDL_Init(SDL_INIT_VIDEO)) {
-    printf("Error initializing SDL: %s\n", SDL_GetError());
+  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    fprintf(stderr, "Error initializing SDL: %s\n", SDL_GetError());
     return 1;
   }
 
   window =
       SDL_CreateWindow("Pacman", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                        WIDTH * CELL_SIZE, HEIGHT * CELL_SIZE, SDL_WINDOW_SHOWN);
+  if (!window) {
+    fprintf(stderr, "Error creating SDL window: %s\n", SDL_GetError());
+    SDL_Quit();
+    return 1;
+  }
+
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+  if (!renderer) {
+    fprintf(stderr, "Error creating SDL renderer: %s\n", SDL_GetError());
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+    return 1;
+  }
 
   int game_loop = 1;
   SDL_Event event;
-
   while (game_loop) {
     while (SDL_PollEvent(&event)) {
-      handle_input(event); // This now simply processes the event
-      if (event.type == SDL_QUIT) {
+      handle_input(event);
+      if (event.type == SDL_QUIT)
         game_loop = 0;
-      }
     }
 
     key_input();
     update_pacman_position();
     draw_maze();
     SDL_RenderPresent(renderer);
-    SDL_Delay(100); // 60 FPS would be approximately 16ms delay
+    SDL_Delay(FPS_DELAY);
   }
 
   SDL_DestroyRenderer(renderer);

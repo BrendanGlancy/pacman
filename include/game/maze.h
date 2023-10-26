@@ -36,5 +36,9 @@ void init_maze();
 NeighborData get_randomized_neighbors(int x, int y);
 void remove_wall_between(Point curr, Point neighbor);
 void generate_maze(int x, int y);
+int move_right(int nextX);
+int move_left(int nextX);
+int move_up(int nextY);
+int move_down(int nextY);
 
 #endif // MAZE_H
