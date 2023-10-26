@@ -1,12 +1,12 @@
-#ifndef MAZE_H
-#define MAZE_H
+#pragma once
 
 #include <stdint.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 #define HEIGHT 28
-#define WIDTH 28
+#define WIDTH 31
 #define CELL_SIZE 30
 
 // Structs
@@ -32,13 +32,8 @@ typedef struct {
 extern Cell maze[HEIGHT][WIDTH];
 
 // Function prototypes
-void init_maze();
+void init_random_maze();
 NeighborData get_randomized_neighbors(int x, int y);
 void remove_wall_between(Point curr, Point neighbor);
 void generate_maze(int x, int y);
-int move_right(int nextX);
-int move_left(int nextX);
-int move_up(int nextY);
-int move_down(int nextY);
-
-#endif // MAZE_H
+void reset_game_board(uint8_t *game_board);

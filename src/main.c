@@ -20,7 +20,8 @@ void render_maze() {
 
   SDL_SetRenderDrawColor(renderer, BLUE_COLOR.r, BLUE_COLOR.g, BLUE_COLOR.b,
                          BLUE_COLOR.a);
-  for (int i = 0; i < HEIGHT; i++) { for (int j = 0; j < WIDTH; j++) {
+  for (int i = 0; i < HEIGHT; i++) {
+    for (int j = 0; j < WIDTH; j++) {
       const Cell *cell = &maze[i][j];
       int x = j * CELL_SIZE;
       int y = i * CELL_SIZE;
@@ -46,7 +47,7 @@ void render_maze() {
 
 int main() {
   srand(time(NULL));
-  init_maze();
+  init_random_maze();
   generate_maze(0, 0);
 
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
