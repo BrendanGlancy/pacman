@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MAZE_H
+#define MAZE_H
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -7,16 +8,15 @@
 #define HEIGHT 28
 #define WIDTH 28
 #define CELL_SIZE 30
-#define LEFT 1
-#define RIGHT 2
-#define TOP 4
-#define BOTTOM 8
 
 // Structs
 typedef struct {
   int x, y;
   int visited;
-  int walls;
+  int top_wall;
+  int bottom_wall;
+  int right_wall;
+  int left_wall;
 } Cell;
 
 typedef struct {
@@ -40,3 +40,5 @@ int move_right(int nextX);
 int move_left(int nextX);
 int move_up(int nextY);
 int move_down(int nextY);
+
+#endif // MAZE_H

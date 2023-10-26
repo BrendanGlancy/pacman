@@ -77,36 +77,41 @@ int val_position(int nextX, int nextY) {
 }
 
 int move_right(int nextX) {
-  if (!maze[nextX][pacman.y].walls) {
+  if (!maze[nextX][pacman.y].right_wall) {
     printf("Can move right\n");
     return 0;
   }
+  printf("%d\n", maze[nextX][pacman.y].right_wall);
+  printf("Can't move right\n");
   return 1;
 }
 
 int move_left(int nextX) {
-  if (maze[nextX][pacman.y].walls) {
+  if (!maze[nextX][pacman.y].left_wall) {
     printf("Can move left\n");
     return 0;
   }
+  printf("%d\n", maze[nextX][pacman.y].left_wall);
   printf("Can't move left\n");
   return 1;
 }
 
 int move_down(int nextY) {
-  if (maze[nextY][pacman.y].walls) {
+  if (!maze[pacman.x][nextY].bottom_wall) {
     printf("Can move down\n");
     return 0;
   }
+  printf("%d\n", maze[pacman.x][nextY].bottom_wall);
   printf("Can't move down\n");
   return 1;
 }
 
 int move_up(int nextY) {
-  if (maze[nextY][pacman.y].walls) {
+  if (!maze[pacman.x][nextY].top_wall) {
     printf("Can move up\n");
     return 0;
   }
+  printf("%d\n", maze[pacman.x][nextY].top_wall);
   printf("Can't move up\n");
   return 1;
 }

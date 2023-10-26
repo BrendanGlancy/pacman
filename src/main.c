@@ -25,14 +25,14 @@ void render_maze() {
       int x = j * CELL_SIZE;
       int y = i * CELL_SIZE;
 
-      if (cell->walls & TOP)
+      if (cell->top_wall)
         SDL_RenderDrawLine(renderer, x, y, x + CELL_SIZE, y);
-      if (cell->walls & BOTTOM)
+      if (cell->bottom_wall)
         SDL_RenderDrawLine(renderer, x, y + CELL_SIZE, x + CELL_SIZE,
                            y + CELL_SIZE);
-      if (cell->walls & LEFT)
+      if (cell->left_wall)
         SDL_RenderDrawLine(renderer, x, y, x, y + CELL_SIZE);
-      if (cell->walls & RIGHT)
+      if (cell->right_wall)
         SDL_RenderDrawLine(renderer, x + CELL_SIZE, y, x + CELL_SIZE,
                            y + CELL_SIZE);
     }
