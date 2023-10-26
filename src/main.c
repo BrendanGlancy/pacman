@@ -13,27 +13,26 @@
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
 
-void draw_maze() {
+void render_maze() {
   SDL_SetRenderDrawColor(renderer, BLACK_COLOR.r, BLACK_COLOR.g, BLACK_COLOR.b,
                          BLACK_COLOR.a);
   SDL_RenderClear(renderer);
 
   SDL_SetRenderDrawColor(renderer, BLUE_COLOR.r, BLUE_COLOR.g, BLUE_COLOR.b,
                          BLUE_COLOR.a);
-  for (int i = 0; i < HEIGHT; i++) {
-    for (int j = 0; j < WIDTH; j++) {
+  for (int i = 0; i < HEIGHT; i++) { for (int j = 0; j < WIDTH; j++) {
       const Cell *cell = &maze[i][j];
       int x = j * CELL_SIZE;
       int y = i * CELL_SIZE;
 
-      if (cell->top_wall)
+      if (cell->walls & TOP)
         SDL_RenderDrawLine(renderer, x, y, x + CELL_SIZE, y);
-      if (cell->bottom_wall)
+      if (cell->walls & BOTTOM)
         SDL_RenderDrawLine(renderer, x, y + CELL_SIZE, x + CELL_SIZE,
                            y + CELL_SIZE);
-      if (cell->left_wall)
+      if (cell->walls & LEFT)
         SDL_RenderDrawLine(renderer, x, y, x, y + CELL_SIZE);
-      if (cell->right_wall)
+      if (cell->walls & RIGHT)
         SDL_RenderDrawLine(renderer, x + CELL_SIZE, y, x + CELL_SIZE,
                            y + CELL_SIZE);
     }
@@ -83,7 +82,7 @@ int main() {
 
     key_input();
     update_pacman_position();
-    draw_maze();
+    render_maze();
     SDL_RenderPresent(renderer);
     SDL_Delay(FPS_DELAY);
   }
