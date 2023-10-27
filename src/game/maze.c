@@ -1,141 +1,71 @@
 #include "../../include/game/maze.h"
+#include "../../include/graphics/renderer.h"
+#include <stdio.h>
 
 Cell maze[HEIGHT][WIDTH];
+int nav_maze[HEIGHT][WIDTH];
 
-void init_random_maze() {
+void generate_nav_maze() {
+  // decode the playfield from an ASCII map into tiles codes
+  static const char *tiles = "0000000000000000000000000000"
+                             "0222222222222002222222222220"
+                             "0200002000002002000002000020"
+                             "0301102011102002011102011030"
+                             "0200002000002002000002000020"
+                             "0222222222222222222222222220"
+                             "0200002002000000002002000020"
+                             "0200002002000000002002000020"
+                             "0222222002222002222002222220"
+                             "0000002000001001000002000000"
+                             "0000002000001001000002000000"
+                             "0000002001111111111002000000"
+                             "0000002001000000001002000000"
+                             "0000002001000000001002000000"
+                             "1111112111011111101112111111"
+                             "0000002001000000001002000000"
+                             "0000002001000000001002000000"
+                             "0000002001111111111002000000"
+                             "0000002001000000001002000000"
+                             "0000002001000000001002000000"
+                             "0222222222222002222222222220"
+                             "0200002000002002000002000020"
+                             "0200002000002002000002000020"
+                             "0322002222222112222222002230"
+                             "0002002002000000002002002000"
+                             "0002002002000000002002002000"
+                             "0222222002222002222002222220"
+                             "0200000000002002000000000020"
+                             "0200000000002002000000000020"
+                             "0222222222222222222222222220"
+                             "0000000000000000000000000000";
+
+  for (int y = 3, i = 0; y <= 33; y++) {
+    for (int x = 0; x < 28; x++, i++) {
+      char tile = tiles[i];
+
+      // Mark paths as 0 and walls as 1
+      if (tile == '0') {
+        nav_maze[y - 3][x] = 1;
+      } else {
+        nav_maze[y - 3][x] = 0;
+      }
+
+      maze[y - 3][x].x = x;
+      maze[y - 3][x].y = y - 3;
+      maze[y - 3][x].visited = 0;
+      maze[y - 3][x].top_wall = (tile == '0') ? 0 : 1;
+      maze[y - 3][x].bottom_wall = (tile == '0') ? 0 : 1;
+      maze[y - 3][x].right_wall = (tile == '0') ? 0 : 1;
+      maze[y - 3][x].left_wall = (tile == '0') ? 0 : 1;
+    }
+  }
+}
+
+void print_nav_maze() {
   for (int i = 0; i < HEIGHT; i++) {
     for (int j = 0; j < WIDTH; j++) {
-      maze[i][j].x = i;
-      maze[i][j].y = j;
-      maze[i][j].visited = 0;
-      maze[i][j].top_wall = 1;
-      maze[i][j].bottom_wall = 1;
-      maze[i][j].right_wall = 1;
-      maze[i][j].left_wall = 1;
+      printf("%d", nav_maze[i][j]);
     }
+    printf("\n");
   }
-}
-
-NeighborData get_randomized_neighbors(int x, int y) {
-  NeighborData data;
-  int count = 0;
-
-  // up
-  if (x > 0) {
-    data.neighbors[count].x = x - 1;
-    data.neighbors[count].y = y;
-    count++;
-  }
-
-  // down
-  if (x < HEIGHT - 1) {
-    data.neighbors[count].x = x + 1;
-    data.neighbors[count].y = y;
-    count++;
-  }
-
-  // right
-  if (y < WIDTH - 1) {
-    data.neighbors[count].x = x;
-    data.neighbors[count].y = y + 1;
-    count++;
-  }
-
-  // left
-  if (y > 0) {
-    data.neighbors[count].x = x;
-    data.neighbors[count].y = y - 1;
-    count++;
-  }
-
-  // shuffle data.neighbors
-  for (int i = 0; i < count; i++) {
-    int j = rand() % count;
-    Point temp = data.neighbors[i];
-    data.neighbors[i] = data.neighbors[j];
-    data.neighbors[j] = temp;
-  }
-
-  data.count = count;
-
-  return data;
-}
-
-void remove_wall_between(Point curr, Point neighbor) {
-  // neighbor is above the current wall
-  if (neighbor.x < curr.x) {
-    maze[curr.x][curr.y].top_wall = 0;
-    maze[neighbor.x][neighbor.y].bottom_wall = 0;
-  }
-  // neighbor is below the current wall
-  else if (neighbor.x > curr.x) {
-    maze[curr.x][curr.y].bottom_wall = 0;
-    maze[neighbor.x][neighbor.y].top_wall = 0;
-  }
-  // neighbor is left of the current wall
-  else if (neighbor.y < curr.y) {
-    maze[curr.x][curr.y].left_wall = 0;
-    maze[neighbor.x][neighbor.y].right_wall = 0;
-  }
-  // neighbor is right of current wall
-  else if (neighbor.y > curr.y) {
-    maze[curr.x][curr.y].right_wall = 0;
-    maze[neighbor.x][neighbor.y].left_wall = 0;
-  }
-}
-
-// Generate the Maze design with a randomized depth first search algorithm
-void generate_maze(int x, int y) {
-  maze[x][y].visited = 1;
-
-  NeighborData neighborData = get_randomized_neighbors(x, y);
-
-  for (int i = 0; i < neighborData.count; i++) {
-    Point neighbor = neighborData.neighbors[i];
-    if (!maze[neighbor.x][neighbor.y].visited) {
-      Point curr = {x, y};
-      // remove the wall between the current cell and the neighbor
-      remove_wall_between(curr, neighbor);
-      // ... this will depend on which neighbor you're looking at
-
-      // recursively generate the maze from this neighbor
-      generate_maze(neighbor.x, neighbor.y);
-    }
-  }
-}
-
-void reset_game_board(uint8_t *game_board) {
-   uint8_t initial_board[WIDTH * HEIGHT] = {
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    0,2,2,2,2,2,2,2,2,2,2,2,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,0,
-    0,2,0,0,0,0,2,0,0,0,0,0,2,0,0,2,0,0,0,0,0,2,0,0,0,0,2,0,
-    0,3,0,1,1,0,2,0,1,1,1,0,2,0,0,2,0,1,1,1,0,2,0,1,1,0,3,0,
-    0,2,0,0,0,0,2,0,0,0,0,0,2,0,0,2,0,0,0,0,0,2,0,0,0,0,2,0,
-    0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,
-    0,2,0,0,0,0,2,0,0,2,0,0,0,0,0,0,0,0,2,0,0,2,0,0,0,0,2,0,
-    0,2,0,0,0,0,2,0,0,2,0,0,0,0,0,0,0,0,2,0,0,2,0,0,0,0,2,0,
-    0,2,2,2,2,2,2,0,0,2,2,2,2,0,0,2,2,2,2,0,0,2,2,2,2,2,2,0,
-    0,0,0,0,0,0,2,0,0,0,0,0,1,0,0,1,0,0,0,0,0,2,0,0,0,0,0,0,
-    0,0,0,0,0,0,2,0,0,0,0,0,1,0,0,1,0,0,0,0,0,2,0,0,0,0,0,0,
-    0,0,0,0,0,0,2,0,0,1,1,1,1,1,1,1,1,1,1,0,0,2,0,0,0,0,0,0,
-    0,0,0,0,0,0,2,0,0,1,0,0,0,0,0,0,0,0,1,0,0,2,0,0,0,0,0,0,
-    0,0,0,0,0,0,2,0,0,1,0,0,0,0,0,0,0,0,1,0,0,2,0,0,0,0,0,0,
-    1,1,1,1,1,1,2,1,1,1,0,1,1,1,1,1,1,0,1,1,1,2,1,1,1,1,1,1,
-    0,0,0,0,0,0,2,0,0,1,0,0,0,0,0,0,0,0,1,0,0,2,0,0,0,0,0,0,
-    0,0,0,0,0,0,2,0,0,1,0,0,0,0,0,0,0,0,1,0,0,2,0,0,0,0,0,0,
-    0,0,0,0,0,0,2,0,0,1,1,1,1,1,1,1,1,1,1,0,0,2,0,0,0,0,0,0,
-    0,0,0,0,0,0,2,0,0,1,0,0,0,0,0,0,0,0,1,0,0,2,0,0,0,0,0,0,
-    0,0,0,0,0,0,2,0,0,1,0,0,0,0,0,0,0,0,1,0,0,2,0,0,0,0,0,0,
-    0,2,2,2,2,2,2,2,2,2,2,2,2,0,0,2,2,2,2,2,2,2,2,2,2,2,2,0,
-    0,2,0,0,0,0,2,0,0,0,0,0,2,0,0,2,0,0,0,0,0,2,0,0,0,0,2,0,
-    0,2,0,0,0,0,2,0,0,0,0,0,2,0,0,2,0,0,0,0,0,2,0,0,0,0,2,0,
-    0,3,2,2,0,0,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,0,0,2,2,3,0,
-    0,0,0,2,0,0,2,0,0,2,0,0,0,0,0,0,0,0,2,0,0,2,0,0,2,0,0,0,
-    0,0,0,2,0,0,2,0,0,2,0,0,0,0,0,0,0,0,2,0,0,2,0,0,2,0,0,0,
-    0,2,2,2,2,2,2,0,0,2,2,2,2,0,0,2,2,2,2,0,0,2,2,2,2,2,2,0,
-    0,2,0,0,0,0,0,0,0,0,0,0,2,0,0,2,0,0,0,0,0,0,0,0,0,0,2,0,
-    0,2,0,0,0,0,0,0,0,0,0,0,2,0,0,2,0,0,0,0,0,0,0,0,0,0,2,0,
-    0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,
-    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
-   memcpy(game_board, initial_board, WIDTH * HEIGHT * sizeof(uint8_t));
 }

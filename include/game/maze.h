@@ -2,11 +2,11 @@
 
 #include <stdint.h>
 #include <stdlib.h>
-#include <time.h>
 #include <string.h>
+#include <time.h>
 
-#define HEIGHT 28
-#define WIDTH 31
+#define HEIGHT 31
+#define WIDTH 28
 #define CELL_SIZE 30
 
 // Structs
@@ -30,10 +30,8 @@ typedef struct {
 
 // Global maze variable (if needed in other files)
 extern Cell maze[HEIGHT][WIDTH];
+extern int nav_maze[HEIGHT][WIDTH];
 
 // Function prototypes
-void init_random_maze();
-NeighborData get_randomized_neighbors(int x, int y);
-void remove_wall_between(Point curr, Point neighbor);
-void generate_maze(int x, int y);
-void reset_game_board(uint8_t *game_board);
+void generate_nav_maze();
+void print_nav_maze();

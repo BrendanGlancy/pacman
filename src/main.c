@@ -47,8 +47,8 @@ void render_maze() {
 
 int main() {
   srand(time(NULL));
-  init_random_maze();
-  generate_maze(0, 0);
+  generate_nav_maze();
+  print_nav_maze();
 
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     fprintf(stderr, "Error initializing SDL: %s\n", SDL_GetError());

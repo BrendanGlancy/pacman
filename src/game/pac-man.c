@@ -65,11 +65,11 @@ int val_position(int nextX, int nextY) {
     return 0;
   }
 
-  if (nextY >= pacman.y && move_down(nextY)) {
+  if (nextY > pacman.y && move_down(nextY)) {
     return 0;
   }
 
-  if (nextY <= pacman.y && move_up(nextY)) {
+  if (nextY < pacman.y && move_up(nextY)) {
     return 0;
   }
 
