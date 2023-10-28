@@ -20,6 +20,7 @@ void render_maze() {
 
   SDL_SetRenderDrawColor(renderer, BLUE_COLOR.r, BLUE_COLOR.g, BLUE_COLOR.b,
                          BLUE_COLOR.a);
+
   for (int i = 0; i < HEIGHT; i++) {
     for (int j = 0; j < WIDTH; j++) {
       const Cell *cell = &maze[i][j];
@@ -49,6 +50,7 @@ int main() {
   srand(time(NULL));
   generate_nav_maze();
   print_nav_maze();
+  init_pacman();
 
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     fprintf(stderr, "Error initializing SDL: %s\n", SDL_GetError());

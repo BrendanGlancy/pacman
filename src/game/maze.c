@@ -64,7 +64,10 @@ void generate_nav_maze() {
 void print_nav_maze() {
   for (int i = 0; i < HEIGHT; i++) {
     for (int j = 0; j < WIDTH; j++) {
-      printf("%d", nav_maze[i][j]);
+      if (nav_maze[i][j] == 1) 
+        printf("%d", nav_maze[i][j]);
+      else
+        printf(" ");
     }
     printf("\n");
   }

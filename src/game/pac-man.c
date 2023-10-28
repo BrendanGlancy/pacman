@@ -5,8 +5,8 @@
 Pacman pacman;
 
 void init_pacman() {
-  pacman.x = 0;
-  pacman.y = 0;
+  pacman.x = WIDTH/ 2;
+  pacman.y = HEIGHT / 2 + 2;
   pacman.dx = 0;
   pacman.dy = 0;
 
@@ -56,64 +56,12 @@ int val_position(int nextX, int nextY) {
     return 0;
   }
 
-  if (nextX > pacman.x && move_right(nextX)) {
-    printf("nextX %d, pacman.x %d \n", nextX, pacman.x);
+  // If the tile in the next position is a wall (0), return 0 (invalid position)
+  if (nav_maze[nextY][nextX] == 1) {
     return 0;
   }
 
-  if (nextX < pacman.x && move_left(nextX)) {
-    return 0;
-  }
-
-  if (nextY > pacman.y && move_down(nextY)) {
-    return 0;
-  }
-
-  if (nextY < pacman.y && move_up(nextY)) {
-    return 0;
-  }
-
-  return 1;
-}
-
-int move_right(int nextX) {
-  if (!maze[nextX][pacman.y].right_wall) {
-    printf("Can move right\n");
-    return 0;
-  }
-  printf("%d\n", maze[nextX][pacman.y].right_wall);
-  printf("Can't move right\n");
-  return 1;
-}
-
-int move_left(int nextX) {
-  if (!maze[nextX][pacman.y].left_wall) {
-    printf("Can move left\n");
-    return 0;
-  }
-  printf("%d\n", maze[nextX][pacman.y].left_wall);
-  printf("Can't move left\n");
-  return 1;
-}
-
-int move_down(int nextY) {
-  if (!maze[pacman.x][nextY].bottom_wall) {
-    printf("Can move down\n");
-    return 0;
-  }
-  printf("%d\n", maze[pacman.x][nextY].bottom_wall);
-  printf("Can't move down\n");
-  return 1;
-}
-
-int move_up(int nextY) {
-  if (!maze[pacman.x][nextY].top_wall) {
-    printf("Can move up\n");
-    return 0;
-  }
-  printf("%d\n", maze[pacman.x][nextY].top_wall);
-  printf("Can't move up\n");
-  return 1;
+  return 1; // Valid position
 }
 
 void update_pacman_position() {
