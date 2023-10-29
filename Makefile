@@ -36,8 +36,8 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 clean:
 	rm -rf $(BUILD_DIR)
 
-# Run the game
+# Run the game and redirect all output to debug-log.txt
 run: $(TARGET)
-	./$(TARGET)
+	./$(TARGET) > debug-log.txt 2>&1
 
 .PHONY: all clean run

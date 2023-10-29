@@ -23,6 +23,7 @@ Ensure you have the following installed:
 ```bash
 brew install sdl2
 brew install sdl2_gfx
+brew install csfml
 ```
 
 #### Linux:
@@ -31,6 +32,7 @@ brew install sdl2_gfx
 sudo apt update
 sudo apt install libsdl2-dev
 sudo apt install libsdl2-gfx-dev
+sudo apt-get install libcsfml-dev
 ```
 
 Project Structure
